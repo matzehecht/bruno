@@ -1,22 +1,22 @@
 const puppeteer = require('puppeteer-core');
 const os = require('node:os');
-const { exec: execOrig } = require('node:child_process');
+const { execFile: execFileOrig } = require('node:child_process');
 const { promisify } = require('node:util');
 const path = require('node:path');
 const which = require('which');
 const { preferencesUtil } = require('../../store/preferences');
 const { matchesCallbackUrl } = require('./authorize-user-utils');
 
-const exec = promisify(execOrig);
+const execFile = promisify(execFileOrig);
 
 const getDefaultBrowserExecutablePath = async () => {
   const platform = os.platform();
   if (platform === 'win32') {
-    const httpHandlerCommand = String.raw`powershell.exe '(Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice").ProgId'`;
-    const progId = (await exec(httpHandlerCommand, { encoding: 'utf8' })).stdout.trim();
+    const httpHandlerArgs = String.raw`(Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice").ProgId`;
+    const progId = (await execFile('powershell.exe', [httpHandlerArgs], { encoding: 'utf8' })).stdout.trim();
 
-    const execPathCommand = String.raw`powershell.exe '(Get-ItemProperty -Path "Registry::HKEY_CLASSES_ROOT\\${progId}\shell\open\command")."(default)"'`;
-    const execPath = (await exec(execPathCommand, { encoding: 'utf8' })).stdout.trim();
+    const execPathArgs = String.raw`(Get-ItemProperty -Path "Registry::HKEY_CLASSES_ROOT\\${progId}\shell\open\command")."(default)"`;
+    const execPath = (await execFile('powershell.exe', [execPathArgs], { encoding: 'utf8' })).stdout.trim();
 
     const parsedExecPath = execPath.split('"')[1]; // Extract path from quotes
 
@@ -24,7 +24,7 @@ const getDefaultBrowserExecutablePath = async () => {
   }
   if (platform === 'darwin') {
     // 1. Get bundle identifier for HTTP handler
-    const { stdout } = await exec('defaults', [
+    const { stdout } = await execFile('defaults', [
       'read',
       'com.apple.LaunchServices/com.apple.launchservices.secure',
       'LSHandlers'
@@ -36,13 +36,19 @@ const getDefaultBrowserExecutablePath = async () => {
     const bundleId = match?.groups.id;
 
     // 2. Find .app path using mdfind
-    const appPath = exec(`mdfind "kMDItemCFBundleIdentifier == '${bundleId}'"`).toString().trim();
+    const appPath = execFile('mdfind', [`"kMDItemCFBundleIdentifier == '${bundleId}'"`])
+      .toString()
+      .trim();
     if (!appPath) {
       throw new Error(`App path not found for bundle ID: ${bundleId}`);
     }
 
     // 3. Read CFBundleExecutable from Info.plist
-    const executableName = exec(`/usr/libexec/PlistBuddy -c "Print :CFBundleExecutable" "${appPath}/Contents/Info.plist"`)
+    const executableName = execFile('/usr/libexec/PlistBuddy', [
+      '-c',
+      '"Print :CFBundleExecutable"',
+      `"${appPath}/Contents/Info.plist"`
+    ])
       .toString()
       .trim();
 
@@ -51,8 +57,9 @@ const getDefaultBrowserExecutablePath = async () => {
     return execPath;
   }
   if (platform === 'linux') {
-    const httpHandlerCommand = `xdg-mime query default x-scheme-handler/http`;
-    const handlerDesktopFile = (await exec(httpHandlerCommand, { encoding: 'utf8' })).stdout.trim();
+    const handlerDesktopFile = (
+      await execFile('xdg-mime', ['query', 'default', 'x-scheme-handler/http'], { encoding: 'utf8' })
+    ).stdout.trim();
 
     return await which(handlerDesktopFile.replace('.desktop', ''));
   }
@@ -73,7 +80,7 @@ const authorizeUserInBrowser = ({
     };
     let currentMainRequest = null;
 
-    const executablePath = systemBrowserExecPath || await getDefaultBrowserExecutablePath();
+    const executablePath = systemBrowserExecPath || (await getDefaultBrowserExecutablePath());
     if (!executablePath) {
       return reject(new Error('Could not determine default browser executable path'));
     }
