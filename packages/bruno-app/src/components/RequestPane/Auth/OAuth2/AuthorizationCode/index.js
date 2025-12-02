@@ -38,7 +38,8 @@ const OAuth2AuthorizationCode = ({ save, item = {}, request, handleRun, updateAu
     autoRefreshToken,
     autoFetchToken,
     additionalParameters,
-    useSystemBrowser
+    useSystemBrowser,
+    systemBrowserExecPath
   } = oAuth;
 
   const refreshTokenUrlAvailable = refreshTokenUrl?.trim() !== '';
@@ -90,6 +91,7 @@ const OAuth2AuthorizationCode = ({ save, item = {}, request, handleRun, updateAu
           autoFetchToken,
           additionalParameters,
           useSystemBrowser,
+          systemBrowserExecPath,
           [key]: value
         }
       })
@@ -119,6 +121,7 @@ const OAuth2AuthorizationCode = ({ save, item = {}, request, handleRun, updateAu
           autoFetchToken,
           additionalParameters,
           useSystemBrowser,
+          systemBrowserExecPath,
           pkce: !Boolean(oAuth?.['pkce'])
         }
       })
@@ -358,6 +361,23 @@ const OAuth2AuthorizationCode = ({ save, item = {}, request, handleRun, updateAu
           </div>
         </div>
       </div>
+      {useSystemBrowser ? (
+        <div className="flex items-center gap-4 w-full">
+          <label className="block min-w-[140px]">System browser<br />executable path</label>
+          <div className="single-line-editor-wrapper flex-1">
+            <SingleLineEditor
+              value={oAuth['systemBrowserExecPath'] || ''}
+              theme={storedTheme}
+              onSave={handleSave}
+              onChange={(val) => handleChange('systemBrowserExecPath', val)}
+              collection={collection}
+              item={item}
+            />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
       <AdditionalParams
         item={item}
         request={request}

@@ -63,7 +63,8 @@ const authorizeUserInBrowser = ({
   authorizeUrl,
   callbackUrl,
   additionalHeaders = {},
-  grantType = 'authorization_code'
+  grantType = 'authorization_code',
+  systemBrowserExecPath
 }) => {
   return new Promise(async (resolve, reject) => {
     let finalUrl = null;
@@ -72,7 +73,7 @@ const authorizeUserInBrowser = ({
     };
     let currentMainRequest = null;
 
-    const executablePath = await getDefaultBrowserExecutablePath();
+    const executablePath = systemBrowserExecPath || await getDefaultBrowserExecutablePath();
     if (!executablePath) {
       return reject(new Error('Could not determine default browser executable path'));
     }

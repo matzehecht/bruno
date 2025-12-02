@@ -740,6 +740,7 @@ const sem = grammar.createSemantics().addAttribute('ast', {
     const autoFetchTokenKey = _.find(auth, { name: 'auto_fetch_token' });
     const autoRefreshTokenKey = _.find(auth, { name: 'auto_refresh_token' });
     const useSystemBrowserKey = _.find(auth, { name: 'use_system_browser' });
+    const systemBrowserExecPathKey = _.find(auth, { name: 'system_browser_exec_path' });
 
     return {
       auth: {
@@ -781,7 +782,8 @@ const sem = grammar.createSemantics().addAttribute('ast', {
                 tokenQueryKey: tokenQueryKeyKey?.value ? tokenQueryKeyKey.value : 'access_token',
                 autoFetchToken: autoFetchTokenKey ? safeParseJson(autoFetchTokenKey?.value) ?? true : true,
                   autoRefreshToken: autoRefreshTokenKey ? safeParseJson(autoRefreshTokenKey?.value) ?? false : false,
-                  useSystemBrowser: useSystemBrowserKey ? safeParseJson(useSystemBrowserKey?.value) ?? false : false
+                  useSystemBrowser: useSystemBrowserKey ? safeParseJson(useSystemBrowserKey?.value) ?? false : false,
+                  systemBrowserExecPath: systemBrowserExecPathKey ? systemBrowserExecPathKey.value ?? null : null
               }
             : grantTypeKey?.value && grantTypeKey?.value == 'client_credentials'
             ? {
@@ -812,7 +814,8 @@ const sem = grammar.createSemantics().addAttribute('ast', {
                 tokenHeaderPrefix: tokenHeaderPrefixKey?.value ? tokenHeaderPrefixKey.value : '',
                 tokenQueryKey: tokenQueryKeyKey?.value ? tokenQueryKeyKey.value : 'access_token',
                 autoFetchToken: autoFetchTokenKey ? safeParseJson(autoFetchTokenKey?.value) ?? true : true,
-                      useSystemBrowser: useSystemBrowserKey ? safeParseJson(useSystemBrowserKey?.value) ?? false : false
+                      useSystemBrowser: useSystemBrowserKey ? safeParseJson(useSystemBrowserKey?.value) ?? false : false,
+                      systemBrowserExecPath: systemBrowserExecPathKey ? systemBrowserExecPathKey.value ?? null : null
               }
             : {}
       }

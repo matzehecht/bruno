@@ -295,14 +295,15 @@ const getOAuth2TokenUsingAuthorizationCode = async ({ request, collectionUid, fo
   }
 };
 
-const authorizeUser = async ({ useSystemBrowser, authorizeUrl, callbackUrl, session, additionalHeaders, grantType }) => {
+const authorizeUser = async ({ useSystemBrowser, authorizeUrl, callbackUrl, session, additionalHeaders, grantType, systemBrowserExecPath }) => {
   // Decide whether to use browser or window based on preferences
   if (useSystemBrowser) {
     return await authorizeUserInBrowser({
       authorizeUrl,
       callbackUrl,
       additionalHeaders,
-      grantType
+      grantType,
+      systemBrowserExecPath
     });
   }
   return await authorizeUserInWindow({
@@ -317,7 +318,7 @@ const authorizeUser = async ({ useSystemBrowser, authorizeUrl, callbackUrl, sess
 const getOAuth2AuthorizationCode = (request, codeChallenge, collectionUid) => {
   return new Promise(async (resolve, reject) => {
     const { oauth2 } = request;
-    const { callbackUrl, clientId, authorizationUrl, scope, state, pkce, accessTokenUrl, additionalParameters, useSystemBrowser } = oauth2;
+    const { callbackUrl, clientId, authorizationUrl, scope, state, pkce, accessTokenUrl, additionalParameters, useSystemBrowser, systemBrowserExecPath } = oauth2;
 
     const authorizationUrlWithQueryParams = new URL(authorizationUrl);
     authorizationUrlWithQueryParams.searchParams.append('response_type', 'code');
@@ -349,6 +350,7 @@ const getOAuth2AuthorizationCode = (request, codeChallenge, collectionUid) => {
       const authorizeUrl = authorizationUrlWithQueryParams.toString();
       const { authorizationCode, debugInfo } = await authorizeUser({
         useSystemBrowser,
+        systemBrowserExecPath,
         authorizeUrl,
         callbackUrl,
         session: oauth2Store.getSessionIdOfCollection({ collectionUid, url: accessTokenUrl }),
@@ -763,7 +765,8 @@ const getOAuth2TokenUsingImplicitGrant = async ({ request, collectionUid, forceF
     credentialsId = 'credentials',
     autoFetchToken = true,
     additionalParameters,
-    useSystemBrowser
+    useSystemBrowser,
+    systemBrowserExecPath
   } = oauth2;
 
   // Validate required fields
@@ -863,6 +866,7 @@ const getOAuth2TokenUsingImplicitGrant = async ({ request, collectionUid, forceF
   try {
     const { implicitTokens, debugInfo } = await authorizeUser({
       useSystemBrowser,
+      systemBrowserExecPath,
       authorizeUrl,
       callbackUrl,
       session: oauth2Store.getSessionIdOfCollection({ collectionUid, url: authorizationUrl }),

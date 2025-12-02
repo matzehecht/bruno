@@ -303,6 +303,7 @@ ${indentString(`token_placement: ${auth?.oauth2?.tokenPlacement || ''}`)}${
 ${indentString(`auto_fetch_token: ${(auth?.oauth2?.autoFetchToken ?? true).toString()}`)}
 ${indentString(`auto_refresh_token: ${(auth?.oauth2?.autoRefreshToken ?? false).toString()}`)}
 ${indentString(`use_system_browser: ${(auth?.oauth2?.useSystemBrowser ?? false).toString()}`)}
+${indentString(`system_browser_exec_path: ${auth?.oauth2?.systemBrowserExecPath || ''}`)}
 }
 
 `;
@@ -344,6 +345,7 @@ ${indentString(`token_placement: ${auth?.oauth2?.tokenPlacement || ''}`)}${
 }
 ${indentString(`auto_fetch_token: ${(auth?.oauth2?.autoFetchToken ?? true).toString()}`)}
 ${indentString(`use_system_browser: ${(auth?.oauth2?.useSystemBrowser ?? false).toString()}`)}
+${indentString(`system_browser_exec_path: ${auth?.oauth2?.systemBrowserExecPath || ''}`)}
 }
 
 `;

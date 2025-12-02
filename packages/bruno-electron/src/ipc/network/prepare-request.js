@@ -114,7 +114,8 @@ const setAuthHeaders = (axiosRequest, request, collectionRoot) => {
               autoFetchToken: get(collectionAuth, 'oauth2.autoFetchToken'),
               autoRefreshToken: get(collectionAuth, 'oauth2.autoRefreshToken'),
               additionalParameters: get(collectionAuth, 'oauth2.additionalParameters', { authorization: [], token: [], refresh: [] }),
-              useSystemBrowser: get(collectionAuth, 'oauth2.useSystemBrowser', {})
+              useSystemBrowser: get(collectionAuth, 'oauth2.useSystemBrowser', {}),
+              systemBrowserExecPath: get(collectionAuth, 'oauth2.systemBrowserExecPath', {})
             };
             break;
           case 'implicit':
@@ -131,7 +132,8 @@ const setAuthHeaders = (axiosRequest, request, collectionRoot) => {
               tokenQueryKey: get(collectionAuth, 'oauth2.tokenQueryKey'),
               autoFetchToken: get(collectionAuth, 'oauth2.autoFetchToken'),
               additionalParameters: get(collectionAuth, 'oauth2.additionalParameters', { authorization: [], token: [], refresh: [] }),
-              useSystemBrowser: get(collectionAuth, 'oauth2.useSystemBrowser', {})
+              useSystemBrowser: get(collectionAuth, 'oauth2.useSystemBrowser', {}),
+              systemBrowserExecPath: get(collectionAuth, 'oauth2.systemBrowserExecPath', {})
             };
             break;
           case 'client_credentials':
@@ -233,7 +235,8 @@ const setAuthHeaders = (axiosRequest, request, collectionRoot) => {
               autoFetchToken: get(request, 'auth.oauth2.autoFetchToken'),
               autoRefreshToken: get(request, 'auth.oauth2.autoRefreshToken'),
               additionalParameters: get(request, 'auth.oauth2.additionalParameters', { authorization: [], token: [], refresh: [] }),
-              useSystemBrowser: get(request, 'auth.oauth2.useSystemBrowser', {})
+              useSystemBrowser: get(request, 'auth.oauth2.useSystemBrowser', {}),
+              systemBrowserExecPath: get(request, 'auth.oauth2.systemBrowserExecPath', {})
             };
             break;
           case 'implicit':
@@ -250,7 +253,8 @@ const setAuthHeaders = (axiosRequest, request, collectionRoot) => {
               tokenQueryKey: get(request, 'auth.oauth2.tokenQueryKey'),
               autoFetchToken: get(request, 'auth.oauth2.autoFetchToken'),
               additionalParameters: get(request, 'auth.oauth2.additionalParameters', { authorization: [], token: [], refresh: [] }),
-              useSystemBrowser: get(request, 'auth.oauth2.useSystemBrowser', {})
+              useSystemBrowser: get(request, 'auth.oauth2.useSystemBrowser', {}),
+              systemBrowserExecPath: get(request, 'auth.oauth2.systemBrowserExecPath', {})
             };
             break;
           case 'client_credentials':
