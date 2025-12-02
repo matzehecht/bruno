@@ -78,6 +78,7 @@ export interface OAuth2 {
   autoRefreshToken?: boolean | null;
   autoFetchToken?: boolean | null;
   additionalParameters?: OAuthAdditionalParameters | null;
+  useSystemBrowser?: boolean;
 }
 
 export type AuthMode =

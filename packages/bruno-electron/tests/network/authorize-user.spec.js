@@ -1,4 +1,4 @@
-const { matchesCallbackUrl } = require('../../src/ipc/network/authorize-user-in-window');
+const { matchesCallbackUrl } = require('../../src/ipc/network/authorize-user-utils');
 
 describe('matchesCallbackUrl', () => {
   const testCases = [

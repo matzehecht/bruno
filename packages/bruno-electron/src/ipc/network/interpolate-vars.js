@@ -259,6 +259,7 @@ const interpolateVars = (request, envVariables = {}, runtimeVariables = {}, proc
         request.oauth2.tokenHeaderPrefix = _interpolate(request.oauth2.tokenHeaderPrefix) || '';
         request.oauth2.tokenQueryKey = _interpolate(request.oauth2.tokenQueryKey) || '';
         request.oauth2.autoFetchToken = _interpolate(request.oauth2.autoFetchToken);
+        request.oauth2.useSystemBrowser = _interpolate(request.oauth2.useSystemBrowser);
         break;
       case 'authorization_code':
         request.oauth2.callbackUrl = _interpolate(request.oauth2.callbackUrl) || '';
@@ -277,6 +278,7 @@ const interpolateVars = (request, envVariables = {}, runtimeVariables = {}, proc
         request.oauth2.tokenQueryKey = _interpolate(request.oauth2.tokenQueryKey) || '';
         request.oauth2.autoFetchToken = _interpolate(request.oauth2.autoFetchToken);
         request.oauth2.autoRefreshToken = _interpolate(request.oauth2.autoRefreshToken);
+        request.oauth2.useSystemBrowser = _interpolate(request.oauth2.useSystemBrowser);
         break;
       case 'client_credentials':
         request.oauth2.accessTokenUrl = _interpolate(request.oauth2.accessTokenUrl) || '';

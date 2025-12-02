@@ -414,6 +414,7 @@ export const transformCollectionToSaveToExportAsFile = (collection, options = {}
                   autoFetchToken: get(si.request, 'auth.oauth2.autoFetchToken', true),
                   autoRefreshToken: get(si.request, 'auth.oauth2.autoRefreshToken', true),
                   additionalParameters: get(si.request, 'auth.oauth2.additionalParameters', {}),
+                  useSystemBrowser: get(si.request, 'auth.oauth2.useSystemBrowser', {})
                 };
                 break;
               case 'implicit':
@@ -430,6 +431,7 @@ export const transformCollectionToSaveToExportAsFile = (collection, options = {}
                   tokenQueryKey: get(si.request, 'auth.oauth2.tokenQueryKey', ''),
                   autoFetchToken: get(si.request, 'auth.oauth2.autoFetchToken', true),
                   additionalParameters: get(si.request, 'auth.oauth2.additionalParameters', {}),
+                  useSystemBrowser: get(si.request, 'auth.oauth2.useSystemBrowser', {})
                 };
                 break;
               case 'client_credentials':

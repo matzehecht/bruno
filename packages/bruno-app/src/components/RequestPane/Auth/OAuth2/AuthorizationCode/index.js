@@ -37,7 +37,8 @@ const OAuth2AuthorizationCode = ({ save, item = {}, request, handleRun, updateAu
     refreshTokenUrl,
     autoRefreshToken,
     autoFetchToken,
-    additionalParameters
+    additionalParameters,
+    useSystemBrowser
   } = oAuth;
 
   const refreshTokenUrlAvailable = refreshTokenUrl?.trim() !== '';
@@ -88,7 +89,8 @@ const OAuth2AuthorizationCode = ({ save, item = {}, request, handleRun, updateAu
           autoRefreshToken,
           autoFetchToken,
           additionalParameters,
-          [key]: value,
+          useSystemBrowser,
+          [key]: value
         }
       })
     );
@@ -116,6 +118,7 @@ const OAuth2AuthorizationCode = ({ save, item = {}, request, handleRun, updateAu
           tokenQueryKey,
           autoFetchToken,
           additionalParameters,
+          useSystemBrowser,
           pkce: !Boolean(oAuth?.['pkce'])
         }
       })
@@ -332,6 +335,25 @@ const OAuth2AuthorizationCode = ({ save, item = {}, request, handleRun, updateAu
             <IconHelp size={16} className="text-gray-500" />
             <span className="group-hover:opacity-100 pointer-events-none opacity-0 max-w-60 absolute left-0 bottom-full mb-1 w-max p-2 bg-gray-700 text-white text-xs rounded-md transition-opacity duration-200">
               Automatically refresh your token using the refresh URL when it expires.
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Use system browser for auth */}
+      <div className="flex items-center gap-4 w-full">
+        <input
+          type="checkbox"
+          checked={Boolean(useSystemBrowser)}
+          onChange={(e) => handleChange('useSystemBrowser', e.target.checked)}
+          className="cursor-pointer ml-1"
+        />
+        <label className="block min-w-[140px]">Use system browser for OAuth2.0 flow</label>
+        <div className="flex items-center gap-2">
+          <div className="relative group cursor-pointer">
+            <IconHelp size={16} className="text-gray-500" />
+            <span className="group-hover:opacity-100 pointer-events-none opacity-0 max-w-60 absolute left-0 bottom-full mb-1 w-max p-2 bg-gray-700 text-white text-xs rounded-md transition-opacity duration-200">
+              Use the system's default browser to complete the OAuth2.0 authorization flow.
             </span>
           </div>
         </div>

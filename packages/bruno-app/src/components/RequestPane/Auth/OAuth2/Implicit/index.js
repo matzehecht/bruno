@@ -30,7 +30,8 @@ const OAuth2Implicit = ({ save, item = {}, request, handleRun, updateAuth, colle
     tokenPlacement,
     tokenHeaderPrefix,
     tokenQueryKey,
-    autoFetchToken
+    autoFetchToken,
+    useSystemBrowser
   } = oAuth;
 
   const interpolatedAuthUrl = useMemo(() => {
@@ -67,7 +68,8 @@ const OAuth2Implicit = ({ save, item = {}, request, handleRun, updateAuth, colle
           tokenHeaderPrefix,
           tokenQueryKey,
           autoFetchToken,
-          [key]: value,
+          useSystemBrowser,
+          [key]: value
         }
       })
     );
@@ -75,6 +77,10 @@ const OAuth2Implicit = ({ save, item = {}, request, handleRun, updateAuth, colle
 
   const handleAutoFetchTokenToggle = (e) => {
     handleChange('autoFetchToken', e.target.checked);
+  };
+
+  const handleUseSystemBrowserToggle = (e) => {
+    handleChange('useSystemBrowser', e.target.checked);
   };
 
   return (
@@ -213,6 +219,25 @@ const OAuth2Implicit = ({ save, item = {}, request, handleRun, updateAuth, colle
             <IconHelp size={16} className="text-gray-500" />
             <span className="group-hover:opacity-100 pointer-events-none opacity-0 max-w-60 absolute left-0 bottom-full mb-1 w-max p-2 bg-gray-700 text-white text-xs rounded-md transition-opacity duration-200">
               Automatically fetch a new token when the current one expires.
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Use system browser for auth */}
+      <div className="flex items-center gap-4 w-full">
+        <input
+          type="checkbox"
+          checked={Boolean(useSystemBrowser)}
+          onChange={handleUseSystemBrowserToggle}
+          className="cursor-pointer ml-1"
+        />
+        <label className="block min-w-[140px]">Use system browser for OAuth2.0 flow</label>
+        <div className="flex items-center gap-2">
+          <div className="relative group cursor-pointer">
+            <IconHelp size={16} className="text-gray-500" />
+            <span className="group-hover:opacity-100 pointer-events-none opacity-0 max-w-60 absolute left-0 bottom-full mb-1 w-max p-2 bg-gray-700 text-white text-xs rounded-md transition-opacity duration-200">
+              Use the system's default browser to complete the OAuth2.0 authorization flow.
             </span>
           </div>
         </div>

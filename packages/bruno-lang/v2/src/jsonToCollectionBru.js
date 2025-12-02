@@ -189,6 +189,7 @@ ${indentString(`token_placement: ${auth?.oauth2?.tokenPlacement || ''}`)}${
 }
 ${indentString(`auto_fetch_token: ${(auth?.oauth2?.autoFetchToken ?? true).toString()}`)}
 ${indentString(`auto_refresh_token: ${(auth?.oauth2?.autoRefreshToken ?? false).toString()}`)}
+${indentString(`use_system_browser: ${(auth?.oauth2?.useSystemBrowser ?? false).toString()}`)}
 }
 
 `;
@@ -208,6 +209,7 @@ ${indentString(`token_placement: ${auth?.oauth2?.tokenPlacement || ''}`)}${
   auth?.oauth2?.tokenPlacement !== 'header' ? '\n' + indentString(`token_query_key: ${auth?.oauth2?.tokenQueryKey || ''}`) : ''
 }
 ${indentString(`auto_fetch_token: ${(auth?.oauth2?.autoFetchToken ?? true).toString()}`)}
+${indentString(`use_system_browser: ${(auth?.oauth2?.useSystemBrowser ?? false).toString()}`)}
 }
 
 `;

@@ -1,6 +1,7 @@
 const { get, cloneDeep, filter } = require('lodash');
 const crypto = require('crypto');
 const { authorizeUserInWindow } = require('../ipc/network/authorize-user-in-window');
+const { authorizeUserInBrowser } = require('../ipc/network/authorize-user-in-browser');
 const Oauth2Store = require('../store/oauth2');
 const { makeAxiosInstance } = require('../ipc/network/axios-instance');
 const { safeParseJSON, safeStringifyJSON } = require('./common');
@@ -294,10 +295,29 @@ const getOAuth2TokenUsingAuthorizationCode = async ({ request, collectionUid, fo
   }
 };
 
+const authorizeUser = async ({ useSystemBrowser, authorizeUrl, callbackUrl, session, additionalHeaders, grantType }) => {
+  // Decide whether to use browser or window based on preferences
+  if (useSystemBrowser) {
+    return await authorizeUserInBrowser({
+      authorizeUrl,
+      callbackUrl,
+      additionalHeaders,
+      grantType
+    });
+  }
+  return await authorizeUserInWindow({
+    authorizeUrl,
+    callbackUrl,
+    session,
+    additionalHeaders,
+    grantType
+  });
+};
+
 const getOAuth2AuthorizationCode = (request, codeChallenge, collectionUid) => {
   return new Promise(async (resolve, reject) => {
     const { oauth2 } = request;
-    const { callbackUrl, clientId, authorizationUrl, scope, state, pkce, accessTokenUrl, additionalParameters } = oauth2;
+    const { callbackUrl, clientId, authorizationUrl, scope, state, pkce, accessTokenUrl, additionalParameters, useSystemBrowser } = oauth2;
 
     const authorizationUrlWithQueryParams = new URL(authorizationUrl);
     authorizationUrlWithQueryParams.searchParams.append('response_type', 'code');
@@ -327,7 +347,8 @@ const getOAuth2AuthorizationCode = (request, codeChallenge, collectionUid) => {
     
     try {
       const authorizeUrl = authorizationUrlWithQueryParams.toString();
-      const { authorizationCode, debugInfo } = await authorizeUserInWindow({
+      const { authorizationCode, debugInfo } = await authorizeUser({
+        useSystemBrowser,
         authorizeUrl,
         callbackUrl,
         session: oauth2Store.getSessionIdOfCollection({ collectionUid, url: accessTokenUrl }),
@@ -741,7 +762,8 @@ const getOAuth2TokenUsingImplicitGrant = async ({ request, collectionUid, forceF
     callbackUrl,
     credentialsId = 'credentials',
     autoFetchToken = true,
-    additionalParameters
+    additionalParameters,
+    useSystemBrowser
   } = oauth2;
 
   // Validate required fields
@@ -839,7 +861,8 @@ const getOAuth2TokenUsingImplicitGrant = async ({ request, collectionUid, forceF
   const authorizeUrl = authorizationUrlWithQueryParams.toString();
   
   try {
-    const { implicitTokens, debugInfo } = await authorizeUserInWindow({
+    const { implicitTokens, debugInfo } = await authorizeUser({
+      useSystemBrowser,
       authorizeUrl,
       callbackUrl,
       session: oauth2Store.getSessionIdOfCollection({ collectionUid, url: authorizationUrl }),

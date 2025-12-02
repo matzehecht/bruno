@@ -344,6 +344,7 @@ const sem = grammar.createSemantics().addAttribute('ast', {
     const tokenQueryKeyKey = _.find(auth, { name: 'token_query_key' });
     const autoFetchTokenKey = _.find(auth, { name: 'auto_fetch_token' });
     const autoRefreshTokenKey = _.find(auth, { name: 'auto_refresh_token' });
+    const useSystemBrowserKey = _.find(auth, { name: 'use_system_browser' });
     return {
       auth: {
         oauth2:
@@ -383,7 +384,8 @@ const sem = grammar.createSemantics().addAttribute('ast', {
                 tokenHeaderPrefix: tokenHeaderPrefixKey?.value ? tokenHeaderPrefixKey.value : '',
                 tokenQueryKey: tokenQueryKeyKey?.value ? tokenQueryKeyKey.value : 'access_token',
                 autoFetchToken: autoFetchTokenKey ? safeParseJson(autoFetchTokenKey?.value) ?? true : true,
-                autoRefreshToken: autoRefreshTokenKey ? safeParseJson(autoRefreshTokenKey?.value) ?? false : false
+                  autoRefreshToken: autoRefreshTokenKey ? safeParseJson(autoRefreshTokenKey?.value) ?? false : false,
+                  useSystemBrowser: useSystemBrowserKey ? safeParseJson(useSystemBrowserKey?.value) ?? false : false
               }
             : grantTypeKey?.value && grantTypeKey?.value == 'implicit'
             ? {
@@ -398,6 +400,7 @@ const sem = grammar.createSemantics().addAttribute('ast', {
                 tokenHeaderPrefix: tokenHeaderPrefixKey?.value ? tokenHeaderPrefixKey.value : '',
                 tokenQueryKey: tokenQueryKeyKey?.value ? tokenQueryKeyKey.value : 'access_token',
                 autoFetchToken: autoFetchTokenKey ? safeParseJson(autoFetchTokenKey?.value) ?? true : true,
+                    useSystemBrowser: useSystemBrowserKey ? safeParseJson(useSystemBrowserKey?.value) ?? false : false
               }
             : grantTypeKey?.value && grantTypeKey?.value == 'client_credentials'
             ? {
